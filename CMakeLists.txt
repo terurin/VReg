@@ -18,6 +18,7 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 add_subdirectory(vreg)
+add_subdirectory(vreg_demo)
 
 include(CTest)
 enable_testing()

@@ -1,6 +1,6 @@
 # library
 add_library(vreg src/vreg.cpp)
-target_include_directories(vreg PRIVATE inc)
+target_include_directories(vreg PUBLIC inc)
 
 # test
 add_executable(vreg_test test/vreg_test.cpp test/vregex_test.cpp)
