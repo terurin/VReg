@@ -36,7 +36,7 @@ template <reader R> static inline auto VRegRO(R &&reader, std::string_view name,
     return VReg(std::move(writer), std::move(reader), name, desc);
 }
 
-static inline auto VRegReserved(std::string_view name="(reserved)", std::string_view desc = "") {
+static inline auto VRegReserved(std::string_view name = "(reserved)", std::string_view desc = "") {
     auto writer = [](std::span<const std::byte> bytes, std::endian endian) -> size_opt {
         (void)bytes, (void)endian;
         return std::nullopt;
@@ -240,18 +240,20 @@ public:
         return std::nullopt;
     }
 
-    virtual size_opt writeAt(size_t addr, std::span<const std::byte> bytes) const {
+    virtual size_opt writeAt(addr_t addr, std::span<const std::byte> bytes,
+                             std::endian endian = std::endian::native) override {
         if (auto opt = find(addr)) {
             const auto &[offset, mount] = *opt;
-            return mount->writeAt(addr - offset, bytes);
+            return mount->writeAt(addr - offset, bytes, endian);
         } else {
             return std::nullopt;
         }
     };
-    virtual size_opt readAt(size_t addr, std::span<std::byte> bytes) const {
+    virtual size_opt readAt(addr_t addr, std::span<std::byte> bytes,
+                            std::endian endian = std::endian::native) override {
         if (auto opt = find(addr)) {
             const auto &[offset, mount] = *opt;
-            return mount->readAt(addr - offset, bytes);
+            return mount->readAt(addr - offset, bytes, endian);
         } else {
             return std::nullopt;
         }
